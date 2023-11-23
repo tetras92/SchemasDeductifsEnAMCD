@@ -11,9 +11,7 @@ def recommendation_algorithm(AlternativesSubsetsList, Wdict, decomposition_funct
     SortedAlternativesSubsetsList = sorted(AlternativesSubsetsList,
                                            key=lambda alt: sum([Wdict[criterion] for criterion in alt]), reverse=True)
     S_ = [None]
-    for v in range(1, len(SortedAlternativesSubsetsList)):  # GROS BUG 1 au lieu de 2
-        # proSet, conSet = SortedAlternativesSubsetsList[0] - SortedAlternativesSubsetsList[v], \
-        #                  SortedAlternativesSubsetsList[v] - SortedAlternativesSubsetsList[0]
+    for v in range(1, len(SortedAlternativesSubsetsList)):
         proSet, conSet = SortedAlternativesSubsetsList[0], \
                          SortedAlternativesSubsetsList[v]
         success_v, Sv = decomposition_function(proSet, conSet, Wdict)

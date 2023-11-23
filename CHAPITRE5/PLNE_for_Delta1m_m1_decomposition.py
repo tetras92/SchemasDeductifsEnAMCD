@@ -13,10 +13,6 @@ def decompose(proSet, conSet, W):
         for j in conSet:
             model.addConstr(Bm1[(i, j)] + quicksum([B1m[(i_, j)] for i_ in proSet]) <= 1, name="C1 ({})".format((i, j)))
 
-    # 2. Unicite contribution de i dans le Delta m1 world                 [Ce 28/11/21 jugé non indispensable à cause de 3. Unicite inter-worlds]
-    # for i in proSet:
-    #     model.addConstr(quicksum([Bm1[(i, j_)] for j_ in conSet]) <= 1, name="C2 ({})".format(i))
-
     # 3. Unicite inter-worlds
     for i in proSet:
         for j in conSet:

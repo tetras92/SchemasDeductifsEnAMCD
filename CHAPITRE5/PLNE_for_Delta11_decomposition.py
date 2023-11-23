@@ -19,7 +19,6 @@ def decompose(proSet, conSet, W):
     # Compatibilite swap et jeu de poids
     for i in proSet:
         for j in conSet:
-            # model.addConstr(W[i] >= W[j]*Sij[(i, j)])
             model.addConstr(W[j]*Sij[(i, j)] <= W[i])
 
     model.update()
@@ -28,22 +27,14 @@ def decompose(proSet, conSet, W):
     if model.status == GRB.OPTIMAL:
         chainons_arguments_list = list()
         dominance_swap = {i: ({i}, set()) for i in proSet}
-        # print("\nDelta 1-1")
         for j in conSet:
             for i in proSet:
                 if Sij[(i, j)].x == 1:
                     chainons_arguments_list.append(({i}, {j}))
                     del dominance_swap[i]
-                    # print(f'\'{i}\' -> \'{j}\'')
 
         return True, chainons_arguments_list + list(dominance_swap.values())
     else:
-        # print("Non Delta 11 decomposable")
         return False, list()
 
 
-if __name__ == "__main__":
-    # decompose({'a', 'd', 'f'}, {'b', 'e', 'g'}, {'a': 128, 'b': 126, 'c': 77, 'd': 59, 'e': 52, 'f': 41, 'g': 37})
-    # decompose({'a', 'd'}, {'b', 'e'}, {'a': 128, 'b': 126, 'c': 77, 'd': 59, 'e': 52, 'f': 41, 'g': 37})
-
-    decompose({'b', 'd'}, {'c', 'e'}, {'a': 0.2456, 'b': 0.2455, 'c': 0.1455, 'd': 0.1135, 'e': 0.1000, 'f': 0.0788, 'g': 0.0712})

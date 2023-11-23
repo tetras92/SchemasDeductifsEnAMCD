@@ -56,7 +56,6 @@ def recommendation_after_deformation_L3(AlternativesSubsetsList, W_dict):
                                   i in pros for j in cons}
 
         # -- Constraints
-        # - (a)ON PEUT S'EN PASSER A CAUSE DE (c) c 05/02/22
         for i in pros:
             model.addConstr(quicksum([other_alternative_related_swapVar_m1[v][(i, j_)] for j_ in cons]) <= 1)
 
