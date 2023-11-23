@@ -5,6 +5,7 @@ Le présent dépôt contient l'intégralité des algorithmes implémentés dans 
 Il comporte 4 répertoires principaux :
 
 A- Le répertoire CHAPITRES2et3
+
   Ce dossier contient principalement:
     - un fichier contenant l'ensemble des 15 algorithmes de calcul d'explication implémentés : *Reference_Functions.py*
     - un fichier exécutable (avec une fonction main) qui reproduit les expérimentations réalisées dans le Chapitre 3 : *Fichier_principal.py*
