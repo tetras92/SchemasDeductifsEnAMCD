@@ -29,7 +29,7 @@ def tr(to_explain_statement, PI_statements_List, W, step=0, BDB=None):
 
     def pareto_domine(dominant_array, dominated_array):
         return all(dominant_array - dominated_array >= 0) and not (
-            all(dominant_array - dominated_array == 0))  # maj ce 14/06/2023
+            all(dominant_array - dominated_array == 0))  #
 
     Successeur_Dict = {st_k: [st_k_prime for st_k_prime in range(len(PI_statements_List)) if
                               np.all(PI_statements_List[st_k][1] == PI_statements_List[st_k_prime][0])
@@ -87,7 +87,6 @@ def tr(to_explain_statement, PI_statements_List, W, step=0, BDB=None):
                 if Chaine_des_st_k[i_pos - 1] == -1:
                     to_consider = alt_x
                 else:
-                    # to_consider = PI_statements_List[i_pos - 1][1] BUG CORRIGE CE 16 AOUT
                     to_consider = PI_statements_List[Chaine_des_st_k[i_pos - 1]][1]
                 if pareto_domine(to_consider, dominant):
                     PresenceDominance.append("D")
@@ -198,9 +197,8 @@ def cov(to_explain_statement, PI_statements_List, W, step=0, BDB=None):
             quicksum([BVar_Dict[j] for j in range(len(PI_statements_List)) if PI_statements_List[j][1][i] == 1]) == 1)
 
     # C4
-    for i in set(range(len(alt_y))) - SigmaD:  # rajouté ce 25/08
+    for i in set(range(len(alt_y))) - SigmaD:  #
         model_gurobi.addConstr(
-            # quicksum([BVar_Dict[j] for j in range(len(PI_statements_List)) if PI_statements_List[j][0][i] == 1]) <= 1)        # Bug corrigé ce 14/09
             quicksum([BVar_Dict[j] for j in range(len(PI_statements_List)) if PI_statements_List[j][1][i] == 1]) <= 1)
 
     # C5
@@ -217,10 +215,8 @@ def cov(to_explain_statement, PI_statements_List, W, step=0, BDB=None):
         Yprime = {i for j in range(len(PI_statements_List)) if BVar_Dict[j].x == 1 for i in
                   range(len(alt_x)) if PI_statements_List[j][1][i] == 1}
 
-        # assert len(Xprime - SigmaP) == 0
         is_SigmaP_Subset_Xprime = len(SigmaP - Xprime) > 0
 
-        # assert len(SigmaD - Yprime) == 0
         is_Yprime_Subset_SigmaD = len(Yprime - SigmaD) > 0
 
         L = list()
@@ -275,7 +271,7 @@ def cg_generique(to_explain_statement, PI_statements_List, W, corresponding_func
             None, None, None, None)
         return False, (
             None, None, None,
-            None)  # assumé de retourner false
+            None)  #
 
     L_0_1 = [(0, 1)] * len(List_neutral)
     PatternList = list(itert.product(*L_0_1))
@@ -557,9 +553,7 @@ def cov_generique(to_explain_statement, PI_statements_List, W, corresponding_fun
         return BDB[name][(tuple(to_explain_statement[0]), tuple(to_explain_statement[1]))]
 
     prefix = "" if step == 0 else "->"
-    # print("all")
     result_cov_incomplet = _cov_incomplet(to_explain_statement, PI_statements_List, W, step=0, BDB=None)
-    # print(result_cov_incomplet)
     if result_cov_incomplet is None:
         BDB[name][(tuple(to_explain_statement[0]), tuple(to_explain_statement[1]))] = False, (None, None, None, None)
         return False, (None, None, None, None)

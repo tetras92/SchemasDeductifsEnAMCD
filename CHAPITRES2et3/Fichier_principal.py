@@ -5,7 +5,6 @@ import pandas as pd
 import datetime
 
 m_value = 4
-# directory_CBTO = f'/home/manuel239/PycharmProjects/SchemasDeductifsEnAMCD/CBTO{m_value}/'
 directory_CBTO = f'./CBTO{m_value}/'
 
 
