@@ -16,6 +16,8 @@ A- Le répertoire CHAPITRES2et3
     
     - un fichier contenant l'implémentation de l'algorithme, décrit en annexe, et permettant la génération de toutes les relations d'ordre linéaire additives définies sur 4, 5 et 6 items : *CBTO_Generator.py*
 
+    - un répertoire *OUTPUTS* qui contient les résultats numériques obtenus à l'issue des expérimentations numériques du Chapitre 3 ainsi que des notebooks qui en réalisent le traitement.
+
 
 B- Le répertoire CHAPITRE4
 
