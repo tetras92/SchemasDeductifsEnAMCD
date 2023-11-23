@@ -10,6 +10,7 @@ from X_robust_Engine import compute_robust_explanations
 
 XP_DIR = f'./XP/'
 
+directory = f'../CHAPITRES2et3/CBTO6'
 
 def transform_omega_function_into_cbto(W_array):
     def ensemble_des_parties_sauf_vide(Ens):

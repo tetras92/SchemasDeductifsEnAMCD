@@ -5,7 +5,6 @@ from NPComputationViaCovector import np_computation
 import itertools as itert
 import datetime
 
-PFIA_XP_DIR = f'/home/manuel239/PycharmProjects/MOMA/CORE/IJAR/XP/PFIA2023/XP1Best/'
 
 
 def doPa_robust(covector_to_check, step=0, BDB=None):
@@ -36,7 +35,7 @@ def cePa_robust(to_explain_statement, PI_statements_List, PI_cofactors_List, ste
     for alt_u, alt_v in PI_statements_List:
         if all(alt_u - alt_x == 0) and all(alt_v - alt_y == 0):
             BDB['[CePa]'][(tuple(alt_x), tuple(alt_y))] = False, (None, None, None, None)
-            return False, (None, None, None, None)  # CePa exclut l'identite : 13/07/2023
+            return False, (None, None, None, None)  # exclut l'identite
 
     for k in range(len(PI_cofactors_List)):
         cof_pi = PI_cofactors_List[k]
@@ -143,8 +142,6 @@ def trE_robust(to_explain_statement, PI_statements_List, step=0, BDB=None):
     Successeur_Dict[-1] = [st_k for st_k in range(len(PI_statements_List)) if
                            pareto_domine(alt_x, PI_statements_List[st_k][0]) or np.all(
                                alt_x == PI_statements_List[st_k][0])]
-    # + (
-    #     [-2] if pareto_domine(alt_x, alt_y) or np.all(alt_x == alt_y) else [])  # ça c'est du dopa ou id
     Successeur_Dict[-2] = list()
 
     model_gurobi = Model("Calcul PCC for transitive Pareto augmented explanations")
@@ -180,7 +177,6 @@ def trE_robust(to_explain_statement, PI_statements_List, step=0, BDB=None):
                     Chaine_des_st_k.append(couple_pred_succ[0])
                     break
             elmt_courant = Chaine_des_st_k[-1]
-        # print("iiiiii")
         Chaine_des_st_k.reverse()
         PresenceDominance = [None]
         for i_pos in range(1, len(Chaine_des_st_k)):
@@ -190,7 +186,6 @@ def trE_robust(to_explain_statement, PI_statements_List, step=0, BDB=None):
                 if Chaine_des_st_k[i_pos - 1] == -1:
                     to_consider = alt_x
                 else:
-                    # to_consider = PI_statements_List[i_pos - 1][1] BUG CORRIGE CE 16 AOUT
                     to_consider = PI_statements_List[Chaine_des_st_k[i_pos - 1]][1]
                 if pareto_domine(to_consider, dominant):
                     PresenceDominance.append("D")
@@ -234,9 +229,6 @@ def trE_robust(to_explain_statement, PI_statements_List, step=0, BDB=None):
 def cov0_robust(covector_to_check, PI_cofactors_List, step=0, BDB=None):
     if BDB is None:
         BDB = dict()
-    # print(covector_to_check)
-    # if tuple(covector_to_check) in BDB['[Cov]']:
-    #     return BDB['[Cov]'][tuple(covector_to_check)]
 
     prefix = "" if step == 0 else "->"
     nb_criteria_considered_alias_m = len(covector_to_check)
@@ -277,20 +269,16 @@ def cov0_robust(covector_to_check, PI_cofactors_List, step=0, BDB=None):
     matching_gurobi_model.optimize()
     explainable = round(matching_gurobi_model.objVal) == len(SigmaD)
     if not explainable:
-        # BDB['[Cov]'][tuple(covector_to_check)] = False, (None, None, None, None)
         return False, (None, None, None, None)
 
     details = (
         prefix + "[Cov0]", [({chr(ord('a') + i_)}, {chr(ord('a') + j)}) for (i_, j), var_ij in booleanVarDict.items() if
                             round(var_ij.x) == 1] + (
-            # [] if len(SigmaP) == len(SigmaD) else [(set(SigmaP) - set(SigmaD),)]), None,                                       # bug recuperation resultat
             [] if len(SigmaP) == len(SigmaD) else [
                 (set([chr(ord('a') + pr) for pr in SigmaP]) - {chr(ord('a') + i_) for (i_, j), var_ij in
                                                                booleanVarDict.items() if
                                                                round(var_ij.x) == 1},)]), None,
-        # bug recuperation resultat
         len(SigmaD) + (1 if len(SigmaP) > len(SigmaD) else 0))
-    # BDB['[Cov]'][tuple(covector_to_check)] = True, details
 
     return True, details
 
@@ -400,7 +388,6 @@ def covD0_robust(to_explain_statement, PI_statements_List,
                                   i] == 1])))  # Mettre exactement la comparaison par paire
             else:
                 explList.append(List_Arcs_PCC[j])
-            # explList.append(List_Arcs_PCC[j])
         assert explList[-1] == -2
 
         BDB['[CovD]'][(tuple(to_explain_statement[0]), tuple(to_explain_statement[1]))] = True, (prefix + "[CovD0]", None, explList[:-1], model_gurobi.objVal - 1)
@@ -446,7 +433,7 @@ def un_Cg_robust(to_explain_statement, PI_statements_List, PI_cofactors_List, st
 
         return False, (
             None, None, None,
-            None)  # en réalité si pas de neutre alors CovD0_robust ou Tr_robust ou Tre_robust. Or un 1-Cg verifie d'abord que ceux-ci retournent False
+            None)
 
     L_0_1 = [(0, 1)] * len(List_neutral)
     PatternList = list(itert.product(*L_0_1))

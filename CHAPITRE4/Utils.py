@@ -30,8 +30,6 @@ def check_int_List_2(int_List, m):
     return True
 
 
-# print([int(dig) for dig in integer_to_bin(4, 4)])
-
 def predicat_in_for_arrays(arr, List_of_arrays):
     for oth_arr in List_of_arrays:
         if all(np.array(arr) == np.array(oth_arr)):
@@ -124,7 +122,6 @@ def save_instance_ijar3(repository, filename, omega_score, setA_as_binary_np_arr
                     # str_elmt += f'*{str(pair)} '
                     str_elmt += f'*{pair[0]}>{pair[1]} '
                 for pair in subj_othSet[k][1]:  # not necessary
-                    # str_elmt += f'~{str(pair)} '
                     str_elmt += f'~{pair[0]}>{pair[1]} '
             str_elmt += "\n"
             ijarfile.write(str_elmt)
@@ -166,7 +163,6 @@ def save_instance_ijar4(repository, filename, omega_score, setA_as_binary_np_arr
                         str_elmt += f'*{pair[0]}>{pair[1]} '
                     for pair in subj_othSet[k]["side-x"][1]:  # not necessary
                         str_elmt += f'~{pair[0]}>{pair[1]} '
-                    # str_elmt += f'# ({str(subj_othSet[k]["selected"][0])}) {str(subj_othSet[k]["selected"][1])}->{str(subj_othSet[k]["selected"][3])} *{str(subj_othSet[k]["selected"][2])}* # '
                     str_elmt += f'#({str(subj_othSet[k]["selected"][0])})->({str(subj_othSet[k]["selected"][2])})# '
                     for pair in subj_othSet[k]["side-y"][0]:  # necessary
                         str_elmt += f'*{pair[0]}>{pair[1]} '
@@ -374,7 +370,7 @@ def read_ijar6a(repository, filename):
                             else:
                                 raise Exception("prefix epistemiq non connue : ", chainons_str[0])
                         subj_othSet_dict[(i_, k_id_line)] = (necessary_swaps_list, non_necessary_swaps_list)
-                        support_Dict[(i_, k_id_line)] = int(part_support[1:].split(" ")[0])                     # bricolage
+                        support_Dict[(i_, k_id_line)] = int(part_support[1:].split(" ")[0])  # bricolage
             k_id_line += 1
 
         line = ijarfile.readline()
@@ -423,13 +419,7 @@ def save_instance_ijar5(repository, filename, omega_score, setA_as_binary_np_arr
                         if indexes is None:  # explication necessaire
                             for pair in Liste_swaps_necessaires:
                                 str_elmt += f'*{pair[0]}>{pair[1]} '
-                        else:  # generalized swap necessaires et PI
-                            # index_alt_z1, index_alt_z2 = indexes                # Cas 1_generalized
-                            # for pair in Liste_swaps_necessaires[0]:
-                            #     str_elmt += f'*{pair[0]}>{pair[1]} '
-                            # str_elmt += f'#({index_alt_z1})->({index_alt_z2})# '
-                            # for pair in Liste_swaps_necessaires[1]:
-                            #     str_elmt += f'*{pair[0]}>{pair[1]} '
+                        else:
                             for i_ in range(len(indexes)):
                                 for pair in Liste_swaps_necessaires[i_]:
                                     str_elmt += f'*{pair[0]}>{pair[1]} '
@@ -556,18 +546,17 @@ def read_ijar3(repository, filename):
     return omega_score_function, setA_as_binary_np_arrays, setAR_as_binary_np_arrays, (
         PI_set, Oth_set, Subj_set, subj_othSet_dict)
 
+
 def generate_instance(m, size_A=10, size_AR=3):
     """m : nombre de critères; size_A: nombre d'alternatives du problème; size_AR : nombre d'alternatives de référence"""
 
     L = [round(float(np.random.rand()), 8) for _ in
-         range(m)]  # 18/09/22 : S'ASSURER QUE LE CONSTRAINTSFEASIBILITYTOL EST TOUJOURS À 10-9
+         range(m)]  #
     L = sorted(L) + [1.]
     omega_score = np.array(sorted([L[i] - L[i - 1] for i in range(1, len(L))], reverse=True))
-    # print(omega_score)
     setA_as_integers = tuple(*np.random.choice(range(1, 2 ** m - 1), size=(1, size_A), replace=False))
 
     while not (check_int_List_2(setA_as_integers, m) and check_int_List_1(setA_as_integers, m)):
-    # while not(check_int_List_1(setA_as_integers, m)):      # je tolere la dominance dans A mais pas dans AR
         setA_as_integers = tuple(*np.random.choice(range(1, 2 ** m - 1), size=(1, size_A), replace=False))
 
     setA_as_binary_np_arrays = [np.array([int(binary_digit) for binary_digit in integer_to_bin(int(alt_int_val), m)])
@@ -584,14 +573,7 @@ def generate_instance(m, size_A=10, size_AR=3):
     setAR_as_binary_np_arrays = list(
         sorted(setAR_as_binary_np_arrays, key=lambda arr: sum(arr * omega_score), reverse=True))
 
-    # print("w : ", omega_score)
-    # print("A : ")
-    # print(*setA_as_binary_np_arrays, sep="\n")
-    # print("AR : ")
-    # print(*setAR_as_binary_np_arrays, sep="\n")
-
     return omega_score, setA_as_binary_np_arrays, setAR_as_binary_np_arrays
-
 
 
 def read_chap1(repository, filename):
@@ -665,24 +647,26 @@ def save_instance_pfia(repository, filename, omega_score, setA_as_binary_np_arra
                 else:
                     str_elmt += " \t-"
                 str_elmt += "\t@"
-            str_elmt += " " + "".join([chr(ord('a') + i) for i in range(len(setA_as_binary_np_arrays[k1])) if setA_as_binary_np_arrays[k1][i] == 1]) + "\n"
+            str_elmt += " " + "".join([chr(ord('a') + i) for i in range(len(setA_as_binary_np_arrays[k1])) if
+                                       setA_as_binary_np_arrays[k1][i] == 1]) + "\n"
             pfiafile.write(str_elmt)
 
         pfiafile.write("AR\n")
         for elmt in setAR_as_binary_np_arrays:
-            pfiafile.write(str(elmt) + " " + "".join([chr(ord('a') + i) for i in range(len(elmt)) if elmt[i] == 1]) + "\n")
+            pfiafile.write(
+                str(elmt) + " " + "".join([chr(ord('a') + i) for i in range(len(elmt)) if elmt[i] == 1]) + "\n")
 
         pfiafile.write("Les choix deduits : ")
-        pfiafile.write(str([str(c) for c in LesChoix])+"\n")
+        pfiafile.write(str([str(c) for c in LesChoix]) + "\n")
 
         pfiafile.write("Les choix expliques : ")
-        pfiafile.write(str([str(c) for c in LesChoixExpliques])+"\n")
+        pfiafile.write(str([str(c) for c in LesChoixExpliques]) + "\n")
 
         pfiafile.write("Les non-choix deduits : ")
-        pfiafile.write(str([str(c) for c in LesNonChoix])+"\n")
+        pfiafile.write(str([str(c) for c in LesNonChoix]) + "\n")
 
         pfiafile.write("Les non-choix expliques : ")
-        pfiafile.write(str([str(c) for c in LesNonChoixExpliques])+"\n")
+        pfiafile.write(str([str(c) for c in LesNonChoixExpliques]) + "\n")
 
         for pair, xp in The_explanations_dict.items():
             pfiafile.write(str(pair) + " : " + str(xp) + "\n")

@@ -14,7 +14,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
     BDB = {"[DoPa]": dict(), "[CePa]": dict(), "[Tr]": dict(), "[TrE]": dict(), "[Cov]": dict(), "[CovD]": dict(),
            "[1-Cg]": dict(), "[1-CgD]": dict(), "[2-Cg]": dict(), "[2-CgD]": dict()}
     while not stabilised:
-        # print(len(PairwiseXplainedWithDetailsDict))
         stabilised = evolutive_context
         TmpXplained_statements = list()
         TmpXplained_cofactors = list()
@@ -31,7 +30,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_pareto
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[DoPa]")
                 continue
 
             is_ct, d_ct = cePa_robust(statementk1k2, PI_statements_List + Xplained_statements,
@@ -41,7 +39,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_ct
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[CePa]")
                 continue
 
             is_tr, d_tr = tr_robust(statementk1k2, PI_statements_List + Xplained_statements, step=step, BDB=BDB)
@@ -50,7 +47,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_tr
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[Tr]")
                 continue
 
             is_trp, d_trp = trE_robust(statementk1k2, PI_statements_List + Xplained_statements, step=step, BDB=BDB)
@@ -59,7 +55,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_trp
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[TrE]")
                 continue
 
             is_kb, d_kb = cov0_robust(cofactork1k2, PI_cofactors_List + Xplained_cofactors, step=step, BDB=BDB)
@@ -68,7 +63,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_kb
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[Cov]")
                 continue
 
             is_gns, d_gns = covD0_robust(statementk1k2, PI_statements_List + Xplained_statements,
@@ -78,7 +72,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_gns
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[CovD]")
                 continue
 
             is_cg_all, d_cg_all = un_Cg_robust(statementk1k2, PI_statements_List + Xplained_statements,
@@ -88,7 +81,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_cg_all
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[1-Cg]")
                 continue
 
             is_m_cg_all, d_m_cg_all = un_Cg_D_robust(statementk1k2, PI_statements_List + Xplained_statements,
@@ -98,7 +90,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_m_cg_all
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[1-CgD]")
                 continue
 
             is_reduced_m_cg_all, d_reduced_m_cg_all = deux_Cg_robust(statementk1k2,
@@ -109,7 +100,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_reduced_m_cg_all
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                # Schemes_used.add("[2-Cg]")
                 continue
 
             is_2_cg_d, d_2_cg_d = deux_Cg_D_robust(statementk1k2, PI_statements_List + Xplained_statements,
@@ -119,7 +109,6 @@ def compute_robust_explanations(Statements_Dict, PI_statements_List, PI_cofactor
                 PairwiseXplainedWithDetailsDict[(k1, k2)] = d_2_cg_d
                 TmpXplained_statements.append(statementk1k2)
                 TmpXplained_cofactors.append(cofactork1k2)
-                Schemes_used.add("[2-CgD]")
                 continue
 
         Xplained_statements += TmpXplained_statements
